@@ -217,7 +217,7 @@ hps_io #(.STRLEN($size(CONF_STR)>>3)) hps_io
 
 	.joystick_0(joy_0_USB),
 	.joystick_1(joy_1_USB),
-	.joystick_analog_0(analog_joy_0)
+	.joystick_analog_0(analog_joy_0),
 	.joy_raw(joydb_1[5:0] | joydb_2[5:0])
 );
 
