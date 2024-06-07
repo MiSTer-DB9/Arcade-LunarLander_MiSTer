@@ -242,7 +242,43 @@ wire [15:0] joy_0_USB, joy_1_USB;
 wire [15:0] joy = joy_0 | joy_1;
 wire [21:0] gamma_bus;
 
-hps_io #(.STRLEN($size(CONF_STR)>>3)) hps_io
+// TL TR AB CO SE S1 U D L R 
+wire [31:0] joy_0 = joydb_1ena ? {joydb_1[7],joydb_1[8],joydb_1[9], joydb_1[11]|(joydb_1[10]&joydb_1[5]), joydb_1[4],joydb_1[10],joydb_1[3:0]} : joy_0_USB;
+wire [31:0] joy_1 = joydb_2ena ? {joydb_2[7],joydb_2[8],joydb_2[9], joydb_2[11]|(joydb_2[10]&joydb_2[5]), joydb_2[4],joydb_2[10],joydb_2[3:0]} : joydb_1ena ? joy_0_USB : joy_1_USB;
+
+wire [15:0] joydb_1 = JOY_FLAG[2] ? JOYDB9MD_1 : JOY_FLAG[1] ? JOYDB15_1 : '0;
+wire [15:0] joydb_2 = JOY_FLAG[2] ? JOYDB9MD_2 : JOY_FLAG[1] ? JOYDB15_2 : '0;
+wire        joydb_1ena = |JOY_FLAG[2:1]              ;
+wire        joydb_2ena = |JOY_FLAG[2:1] & JOY_FLAG[0];
+
+//----BA 9876543210
+//----MS ZYXCBAUDLR
+reg [15:0] JOYDB9MD_1,JOYDB9MD_2;
+joy_db9md joy_db9md
+(
+  .clk       ( CLK_JOY    ), //40-50MHz
+  .joy_split ( JOY_SPLIT  ),
+  .joy_mdsel ( JOY_MDSEL  ),
+  .joy_in    ( JOY_MDIN   ),
+  .joystick1 ( JOYDB9MD_1 ),
+  .joystick2 ( JOYDB9MD_2 )	  
+);
+
+//----BA 9876543210
+//----LS FEDCBAUDLR
+reg [15:0] JOYDB15_1,JOYDB15_2;
+joy_db15 joy_db15
+(
+  .clk       ( CLK_JOY   ), //48MHz
+  .JOY_CLK   ( JOY_CLK   ),
+  .JOY_DATA  ( JOY_DATA  ),
+  .JOY_LOAD  ( JOY_LOAD  ),
+  .joystick1 ( JOYDB15_1 ),
+  .joystick2 ( JOYDB15_2 )	  
+);
+
+
+hps_io #(.CONF_STR(CONF_STR)) hps_io
 (
 	.clk_sys(clk_25),
 	.HPS_BUS(HPS_BUS),
@@ -260,9 +296,11 @@ hps_io #(.STRLEN($size(CONF_STR)>>3)) hps_io
 	.ioctl_addr(ioctl_addr),
 	.ioctl_dout(ioctl_dout),
 
-	.joystick_0(joy_0),
-	.joystick_1(joy_1),
-	.joystick_analog_0(analog_joy_0)
+	.joy_raw(joydb_1[5:0] | joydb_2[5:0]),
+	
+	.joystick_0(joy_0_USB),
+	.joystick_1(joy_1_USB),
+	.joystick_l_analog_0(analog_joy_0)
 );
 
 
