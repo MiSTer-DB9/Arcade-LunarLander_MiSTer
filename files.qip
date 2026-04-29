@@ -13,5 +13,3 @@ set_global_assignment -name VHDL_FILE rtl/llander_vg.vhd
 set_global_assignment -name VHDL_FILE rtl/llander_top.vhd
 set_global_assignment -name VHDL_FILE rtl/llander.vhd
 set_global_assignment -name VHDL_FILE rtl/ovo.vhd
-set_global_assignment -name VERILOG_FILE rtl/joydb9md.v
-set_global_assignment -name VERILOG_FILE rtl/joydb15.v
