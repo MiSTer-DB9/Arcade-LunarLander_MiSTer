@@ -27,7 +27,7 @@ source "${SCRIPT_DIR}/compute_source_hash.sh"
 # shellcheck source=gha_emit.sh
 source "${SCRIPT_DIR}/gha_emit.sh"
 
-UPSTREAM_REPO="https://github.com/MiSTer-devel/Arcade-LunarLander_Mister.git"
+UPSTREAM_REPO="https://github.com/MiSTer-devel/Arcade-LunarLander_MiSTer.git"
 MAIN_BRANCH="master"
 UPSTREAM_BRANCH="master"
 
