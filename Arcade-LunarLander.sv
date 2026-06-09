@@ -215,7 +215,7 @@ wire  [15:0] db9_remap_din;
 // [MiSTer-DB9 END]
 joydb joydb (
   .clk             ( CLK_JOY         ),
-  .clk_sys         ( clk_sys            ),
+  .clk_sys         ( clk_25            ),
   .USER_IN         ( USER_IN         ),
   .OSD_STATUS          ( OSD_STATUS          ),
   .snac_active         ( snac_active         ),
